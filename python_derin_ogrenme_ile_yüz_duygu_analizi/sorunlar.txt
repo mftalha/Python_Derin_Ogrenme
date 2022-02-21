@@ -1,0 +1,18 @@
+Sorunlar :
+1- vidyoda  yüz algılama 
+2- vidyonun yavaş ilerlemesi(ağır çekim gibi)
+
+
+Çözümler:
+1-Anahtar kelimeler: Nesne tanıma, nesne takibi, Faster R-CNN, görüntü işleme, derin öğrenme.
+1-Nesne tespiti ve
+tanımada kullanılan popüler kütüphaneler arasında Single Shot Multibox Detactor (SSD), Region Based
+Convolutional Networks (R-CNN), Fast R-CNN, Faster R-CNN ve Mask R-CNN bulunmaktadır [2].
+1-Geliştirilen uygulamada yapılan testlerde görüldüğü üzere, nesne tespiti ve tanıma işleminde başarı oranının
+daha yüksek olması için Faster R-CNN kullanılmalıdır. Ancak, Faster R-CNN benzerlerine kıyasla daha güçlü bir
+donanıma ihtiyaç duymaktadır ve Single Shot Multibox Detactor (SSD)’ye göre daha yavaştır. Ayrıca, SSD sadece
+tek ileri gidiş yaptığı için düşük donanımlı cihazlarda bile hızlı bir şekilde nesne tanıma yapabilmektedir. Ancak
+SSD ile çok isabetli modeller oluşturulamamaktadır. Bu nedenle, sadece hız önemli ise ve gerçek zamanlı nesne
+tespiti ve tanıma işlemi gerçekleştirilecekse SSD tercih edilmelidir.
+
+1- viola-jones  algoritması 

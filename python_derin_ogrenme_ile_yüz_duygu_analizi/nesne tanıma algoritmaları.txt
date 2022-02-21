@@ -1,0 +1,71 @@
+- viola-jones Algoritması : eğitim ve tanıma(yüz tanıma) 2 adımdan oluşur
+   algoritmanın çalışması için yüz düz olması lazım düz bakacak kameraya (yandan bakma açılı bakma sorun çıkartıyor)
+    -resmi siyah-beyaz a çeviriyor(gri tonlama: sadece 1 renkde çalışacaz bu sayede) 
+    - resmin ilk başta sol üst köşesine bir kare koyuyor = bu kare içinde yüz özellikleri arar(kaş,gözburun,yanak,ağız)
+    - bütün resmi başlattıgı kareyi önce sağa kaydırarak,ek saga geldiginde aşşagı kayıp en soldan bidaha saga giderek
+       yüz arıyor resimde,resmin en alt sağ köşesine kadar gidiyor.
+    -resmi arka planda siyah beyaza çevirip yüzleri arıyor , ama buldugu yüzleri renkli resim üzerinde gösterir
+
+   -Haar-like Özellikler:(kenar özellikleri ,çizgi özellikleri,Dört-Kare Özellikeri :resmin belli kısmını kararatma)
+     viola-jones Algoritmasında kullanılıyor. = burda kaş mesela çizgi özelliğine yakalnır= kaş:siyah, alın:beyaz (piksel farkı ile)
+     -bir kare içinde yeterince haar like özelliği yakalınca o bölgede yüz olma olasılığı daha yüksek demek oluyor.
+     -integral resmi : resimde seçtigim noktanın sol üst ve sol tarafında kalan yerleri tümünü topluyoruz.
+       burda belli bir dikdörtgeni en köşelerindeki 4 değerle o dikdörtgenin tümünün piksellerinin toplamı bulabiliyoruz.(hız)
+     -eğitim sırasında resmi 24*24 yapıp işlemleri uygular = küçük resimde işlem hızlanır
+      -bir resimde 180.000 özellik bakması gerekiyor bu da çok uzun  sürer eğitimde de uygulamadada
+        adaboost = eğitim sırasında birbirini(diğer özelligin hatalı buldugunu do gru bulan) tamamlayan zayıf(tek özellik) 
+          özellikleri birbirleriyle sınıflandırıp resimlere sadece bunları uyguluyor böylece 180.000 özellik yerine daha az özelligi 
+          resme uygular,buda hız sağlar
+         Cascading : adaboost da ayırdıgımız sınıfları resme toplu uygulamak yerine, bir sınıfın en önemli özelligini
+            resme uyguluyoruz eğer o yoksa o resimde diğer özelliklere bakmıyoruz , diğer sınıflara bakıyoruz.
+              gerçekte 1 tane özellik değilde = en önemli 3-5-7 özelliğe bakıyoruz sayıyı istediğimiz gibi veririz.
+
+R-CNN: 
+ -resimde pencere oluşturuyoruz(kare alan) : bu kareyi konvilisyon sinir ağından geçiriyoruz.
+ -nesne aramayı resmin heryeridne kare kare aramak yerine ,nesne bulma olasılığı yüksek olan
+   yerlere( 2000 bin civarı = selected sorc) bakılıyor sadece böyle ce işlem hızını çok fazla şekilde
+   arttırıyoruz. bu bölge önerisi = derin ögrenme ile yapılmıyor.(ilgi bölgesi)(bu pencerelerin boyutları farklı ama nesne alımından
+    sonra boyutlarını eşitliyoruz.) 
+   tek tek sinir ağından geçiriyoruz,sinir ağından sonra o bölgede sınıflandırma yapmak için svm(makine ögrenme yöntemi) 
+   kullanılıyor , linear regression ile de nesnenin sınırları belirleniyor = bu şekilde etrafına dikdörtgen çizebiliyoruz.
+  linear regresyon = bir veya birden fazla birbirinden bagımsız değişken ile başka bir bağımlı değişken arası bağlantıyı
+  modellemek için kullanılan bir yöntem. = nesnenin bulunduğu alanı tam olarak tespit ederek dikdörtgeni tam oturacak
+  şekilde çiziyoruz.
+  eğer nesne ilgi bölgesinin dışına taşıyorsa çizimde taşan kısmıda dikdörgenin içine alıyoruz.
+  - eğitim , ve tanıma yapma yavaş
+
+Fast R-CNN:
+ -resmde bölge önerisi yapmak yerine resmi direk convilisyondan geçiriyoruz.
+ -resme uyan yüksek çözünürlüklü özellik haritası çıkartıyoruz.
+ -aldıgımız özellik haritasnda selected sort ile bölge önerisi çıkartıyoruz. : R-CNN deki 200 bin matrisi tek tek convilisyondan 
+   geçirmek ten kurtuluyoruz.
+ -önerilen bölgeleri alıp ful connection layera bağlıyoruz : belirli boyutta input bekliyor o yüzden belirlenen bölgeleri 
+   şekillendirip boyutları uygun hale getiriyoruz.
+ - sonra sınıflandırma yapılıyor(rcn den farkı softmax layer kullanılıyor) : tespit edilen nesnenin sınırları belirleniyor.
+   softmax layer : sinir ağını genişletip sinir ağının içinde sınıflandırma yapıyoruz(R-CNN de svm kullanıyorduk sınıflandıma için)
+   egitim ve uygulaması R-CNN e göre 10 kat civarı daha hızlı sonuçlar verir.
+ 
+Faster R-CNN : R-CNN deki dar boğazın çözülmüş hali : 2000 matrise sinir ağına hazırlama ve verme aşaması. 
+  testte :en hızlı r-cnn testte
+  
+Not: R-cnn serilerinde resimde nesne algılama 2 katmandan oluşur ilkinde resimde nesne olabilicek yerler tesbit edilir
+       sonra o ralar sinir ağından geçirilir.
+
+SSD : R-CNN deki 2 aşama tek aşamada yapılıyor. (ssd ye benzer yola dize algoritma var ama ssd daha iyi çalışıyor.)
+   - resmi alıyor , convilisyonel sinir ağından geçiryor : karşımıza farklı boyutlarda özellik haritaları çıkıyor
+   - tüm özellik haritalarında 3*3 convilisyonel filtre ile az miktarda sınırlayıcı dikdörtgen elde ediyoruz
+      her dikdörgen için hem sınırlar hemde sınıfalar belirlenyor.
+    bu dikdörgenler her aktivasyon haritasında olduğu için hem küçük nesneleri hem büyük nesneleri tanıyabiliyoruz.
+   -en iyi tahmin yapanlar veya belli bir eşik değerinin üstünde dogruluk veren dikdörtgenler pozitif olarak etiketleniyor.
+   -her bölge de farklı işlemler yapmak yerine bütün tahminleri bir convilisyonel sinir ağının içinde yapıyoruz.
+   - output : 7*7*(5*B+C) ,B : Dikdörgenler, C:Tahmin sikorları , 7*7 = resim boyutu
+
+Sonuç:
+ *Faster R-CNN daha isabetli   (daha fazla donanım )
+ *SDD daha hızlı
+  *Hızönemliyse SSD,isabet önemliyse Faster R-CNN kullanılmalı
+
+Mask R-CNN:
+  
+  
+ 

@@ -1,0 +1,56 @@
+-Cnn de Normalizasyon piksel değerlerini 0-1 arasına çekmek (siyah beyaz - gri yapmak)
+ böylece sistem daha hızlı çalışıyor.
+
+-Label Encoding : değerleri kerasın anlıyacağı formata çevirme = y_head leri
+  0 : 1 0 0 0 0 0 ..
+   1 : 0 1 0 0 0           
+   2 :0 0 1 0 0 ..        =one-hot-encoding  (tocatogirical)
+
+- resimleri = 28 28 1 yapmak lazım : 1 gri tonlu oldugunu gösterir
+
+- Same Padding = Convulation Layer ı resme uyguladıgımızdan veri kaybını engellemek için
+  resmin dışını resmi kapıylacak şekilde bi pencerece oluşturma (0 lardan oluşur)
+  farklı same pading metotlarıda var bu(same) 
+
+-Convulation Layer = filtreler sayesinde resimdeki ayırt edici özellikleri yakalar
+ =resmin boyutunu güçültür
+ feature detector = resimi ayırt etmeye yarayan filtre.(Stride : filtrede resmin ne kadar kayacağı)
+ feautere maps : ayırt edilmiş özellikleri gösterir : resmin filtreden çıkmış hali
+
+-aktivasyon fonksiyonları(relu)= feature maps lere uygulanır
+
+-Pooling Layer= resimdeki ayırt edici özelliklerin = en ayırt edici noktalarına odaklanır
+ böylece resim küçülür, bu da sistemin daha hızlı çalışmasını sağlar.
+ 
+  Max Pooling = (sampling) : çıkan feature maps de ki belirlenen matrise göre(2*2 mesela) 
+  en yüksek(en düşükde olabilir,farklı şeylerde) değeri al böylece resimdeki ayırt edici noktaların
+  en ayırt edici noktalarına odaklanıyoruz
+
+-Dropout : layerdaki bazı nöronları kapatarak ezberlemeyi engelleme çabası
+  (Fully Connected da yapılıyor):  
+   random thresholdbelirle mesela 5 = 5 in altındaysa kapat , üstündeyse aç
+
+-Flatten(flatting) = veriyi sinir ağına sokabilmek için 28*28 veriyi(mesela) =784*1 e çeviriyoruz 
+  sinir ağına tek boyutlu matris girişi vermemiz gerektiği için.
+  Pooled Feature Map e uygulanır : Max Polingden sonra yani
+
+-Full Connected = classficın yaptıgımız soft max aktivasyon kısmını içeren son kısım
+  aktivaysın nöral network kısmı (sinir ağı kısmı)(artifical Neural network).
+
+   nöral networkda her nodu bir sonraki katmanın her noduna bağlamak zorunda değiliz.
+   ama full connection kısmında hepsi hepsine bağlanmak zorunda.
+
+  flatten sonucunda gelen verileri alır  girdi olarak.
+  
+-sequantial = yapı : layerları barındırır
+
+-batch size : tek seferde sisteme vereceğimiz veri sayısı:
+ mesela bizim elimizde 10 veri varsa ve batch size 2 ise : 5 defa :forfard ve batch yapacaksın 
+ 1 epoch u tamamlamak için 5 kere dönmen lazım 2 şer veriyle diyor. = yani 
+
+-Data Augmentation (ImageDataGenerator ) : ezberlemeyi engellemek için 
+  bizim verilermizi biraz değiştiriyoruz :az saga yatır , sola yatır , ters yatır , zoom  yap gibi : resme
+  
+ training deki verilerimiz üzerinde bu değişikleri yapıp veri setimize ekliyoruz.
+
+

@@ -1,0 +1,3 @@
+-Sınıflandırma, veriyi önceden belirlenmiş sınıflardan
+birine dâhil etmektir. Kümeleme ise benzer verileri, benzer özellik gösterenleri aynı grupta toplamadır
+-
